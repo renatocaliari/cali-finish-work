@@ -1,0 +1,28 @@
+{
+  "name": "cali-finish-work",
+  "version": "1.0.0",
+  "description": "Pi extension: commit, create PR (via gh CLI) or merge into default branch, push, clean up. Run from a git worktree branch.",
+  "keywords": [
+    "pi-extension",
+    "git",
+    "worktree",
+    "pr",
+    "merge",
+    "finish-work"
+  ],
+  "license": "MIT",
+  "author": "renatocaliari",
+  "type": "module",
+  "files": [
+    "src/index.ts"
+  ],
+  "pi": {
+    "extensions": [
+      "./src/index.ts"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/renatocaliari/cali-finish-work.git"
+  }
+}
