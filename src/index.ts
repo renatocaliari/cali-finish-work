@@ -351,12 +351,20 @@ async function prFlow(
     );
   }
 
-  // Delete local branch
-  ctx.ui.notify("🗑️  Deletando branch local...", "info");
-  run(`git branch -d "${branch}"`, cwd);
+  // Delete local branch (safe: skip if checked out in current worktree)
+  const isWorktree = runSilent("git rev-parse --git-common-dir", cwd) !== ".git";
+  if (isWorktree) {
+    ctx.ui.notify(
+      `ℹ️  Branch "${branch}" is checked out in this worktree. Remove worktree in Muxy (⌘⇧O → right-click → Remove).`,
+      "info",
+    );
+  } else {
+    ctx.ui.notify("🗑️  Deletando branch local...", "info");
+    run(`git branch -d "${branch}"`, cwd);
+  }
 
   ctx.ui.notify(
-    `✅ ${branch} → PR #${prNum}. Remova worktree em Muxy (⌘⇧O → right-click → Remove).`,
+    `✅ ${branch} → PR #${prNum}.`,
     "success",
   );
 }
@@ -381,9 +389,17 @@ async function mergeFlow(
   ctx.ui.notify(`⬆️  Pushing ${defaultBranch}...`, "info");
   run(`git push origin ${defaultBranch}`, masterWT.path);
 
-  // Delete local branch
-  ctx.ui.notify("🗑️  Deletando branch local...", "info");
-  run(`git branch -d "${branch}"`, cwd);
+  // Delete local branch (safe: skip if checked out in current worktree)
+  const isWorktree = runSilent("git rev-parse --git-common-dir", cwd) !== ".git";
+  if (isWorktree) {
+    ctx.ui.notify(
+      `ℹ️  Branch "${branch}" is checked out in this worktree. Remove worktree in Muxy (⌘⇧O → right-click → Remove).`,
+      "info",
+    );
+  } else {
+    ctx.ui.notify("🗑️  Deletando branch local...", "info");
+    run(`git branch -d "${branch}"`, cwd);
+  }
 
   // Restore stashed changes if any
   const stashList = runSilent("git stash list", masterWT.path);
